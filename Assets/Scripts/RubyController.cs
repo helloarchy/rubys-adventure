@@ -1,30 +1,38 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class RubyController : MonoBehaviour
 {
+    private Rigidbody2D _rigidbody2d;
+    private float _horizontal;
+    private float _vertical;
+    private const float MovementUnits = 3.0f;
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         // QualitySettings.vSyncCount = 0;
         // Application.targetFrameRate = 10;
+        _rigidbody2d = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        float movementUnits = 3.0f;
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-        
-        Debug.Log(horizontal);
-        Debug.Log(vertical);
-        
-        Vector2 position = transform.position;
-        position.x += movementUnits * horizontal * Time.deltaTime;
-        position.y += movementUnits * vertical * Time.deltaTime;
-        
-        transform.position = position;
+        _horizontal = Input.GetAxis("Horizontal");
+        _vertical = Input.GetAxis("Vertical");
+    }
+
+    // FixedUpdate is for physics
+    private void FixedUpdate()
+    {
+
+        var position = _rigidbody2d.position;
+        position.x += MovementUnits * _horizontal * Time.deltaTime;
+        position.y += MovementUnits * _vertical * Time.deltaTime;
+
+        _rigidbody2d.MovePosition(position);
     }
 }
