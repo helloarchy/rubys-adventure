@@ -8,14 +8,17 @@ public class RubyController : MonoBehaviour
     private Rigidbody2D _rigidbody2d;
     private float _horizontal;
     private float _vertical;
-    private const float MovementUnits = 3.0f;
+
+    public float moveSpeed = 3.0f;
+    public int maxHealth = 5;
+    
+    public int CurrentHealth { get; private set; }
 
     // Start is called before the first frame update
     private void Start()
     {
-        // QualitySettings.vSyncCount = 0;
-        // Application.targetFrameRate = 10;
         _rigidbody2d = GetComponent<Rigidbody2D>();
+        CurrentHealth = maxHealth;
     }
 
     // Update is called once per frame
@@ -28,11 +31,20 @@ public class RubyController : MonoBehaviour
     // FixedUpdate is for physics
     private void FixedUpdate()
     {
-
         var position = _rigidbody2d.position;
-        position.x += MovementUnits * _horizontal * Time.deltaTime;
-        position.y += MovementUnits * _vertical * Time.deltaTime;
+        position.x += moveSpeed * _horizontal * Time.deltaTime;
+        position.y += moveSpeed * _vertical * Time.deltaTime;
 
         _rigidbody2d.MovePosition(position);
+    }
+    
+    /// <summary>
+    /// Set Ruby's health
+    /// </summary>
+    /// <param name="amount">The amount to increase Ruby's health</param>
+    public void ChangeHealth(int amount)
+    {
+        CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, maxHealth);
+        Debug.Log($"Current health: {CurrentHealth}/{maxHealth}");
     }
 }
