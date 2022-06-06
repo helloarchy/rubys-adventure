@@ -5,14 +5,19 @@ using UnityEngine;
 
 public class RubyController : MonoBehaviour
 {
-    private Rigidbody2D _rigidbody2d;
-    private float _horizontal;
-    private float _vertical;
-
     public float moveSpeed = 3.0f;
     public int maxHealth = 5;
-    
+    public float timeInvincible = 2.0f;
+
     public int CurrentHealth { get; private set; }
+
+    private bool _isInvincible;
+    private float _invincibleTimer;
+
+    private Rigidbody2D _rigidbody2d;
+
+    private float _horizontal;
+    private float _vertical;
 
     // Start is called before the first frame update
     private void Start()
@@ -26,6 +31,13 @@ public class RubyController : MonoBehaviour
     {
         _horizontal = Input.GetAxis("Horizontal");
         _vertical = Input.GetAxis("Vertical");
+
+        if (_isInvincible)
+        {
+            _invincibleTimer -= Time.deltaTime;
+            if (_invincibleTimer < 0)
+                _isInvincible = false;
+        }
     }
 
     // FixedUpdate is for physics
@@ -37,13 +49,24 @@ public class RubyController : MonoBehaviour
 
         _rigidbody2d.MovePosition(position);
     }
-    
+
     /// <summary>
     /// Set Ruby's health
     /// </summary>
     /// <param name="amount">The amount to increase Ruby's health</param>
     public void ChangeHealth(int amount)
     {
+        if (amount < 0)
+        {
+            if (_isInvincible)
+            {
+                return;
+            }
+
+            _isInvincible = true;
+            _invincibleTimer = timeInvincible;
+        }
+
         CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, maxHealth);
         Debug.Log($"Current health: {CurrentHealth}/{maxHealth}");
     }
