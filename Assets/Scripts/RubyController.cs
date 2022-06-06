@@ -53,7 +53,8 @@ public class RubyController : MonoBehaviour
     /// <summary>
     /// Set Ruby's health
     /// </summary>
-    /// <param name="amount">The amount to increase Ruby's health</param>
+    /// <param name="amount">The amount to change Ruby's health by.
+    /// Use negative amounts for damage.</param>
     public void ChangeHealth(int amount)
     {
         if (amount < 0)
