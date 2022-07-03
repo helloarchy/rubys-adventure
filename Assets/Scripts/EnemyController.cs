@@ -14,11 +14,15 @@ public class EnemyController : MonoBehaviour
     private float _timer;
     private int _direction = 1;
 
+    private Animator _animator;
+
     // Start is called before the first frame update
     private void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _timer = changeTime;
+        
+        _animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -39,10 +43,16 @@ public class EnemyController : MonoBehaviour
         if (vertical)
         {
             position.y += Time.deltaTime * speed * _direction;
+            
+            _animator.SetFloat("Move X", 0);
+            _animator.SetFloat("Move Y", _direction);
         }
         else
         {
             position.x += Time.deltaTime * speed * _direction;
+            
+            _animator.SetFloat("Move X", _direction);
+            _animator.SetFloat("Move Y", 0);
         }
 
         _rigidbody2D.MovePosition(position);
